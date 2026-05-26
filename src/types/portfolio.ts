@@ -94,7 +94,71 @@ export type SdkExpertiseGroup = {
 export type DemoModule = {
   slug: string;
   title: string;
-  status: "planned" | "scaffolded";
+  status: "planned" | "scaffolded" | "available";
   summary: string;
   systems: string[];
+  projectSlug?: string;
+  renderer?: "r3f" | "dom" | "unity-webgl";
+  route?: string;
+};
+
+export type ProjectWorldZone = {
+  slug: string;
+  title: string;
+  eyebrow: string;
+  theme: string;
+  fantasy: string;
+  coreLoop: string[];
+  rewardLoop: string[];
+  atmosphere: string[];
+  transition: string;
+  soundHooks: string[];
+  mood: string[];
+  summary: string;
+  route: string;
+  projectSlug?: string;
+  demoSlug?: string;
+  systems: string[];
+  interactions: string[];
+  metrics: Metric[];
+  accent: "signal" | "reactor" | "danger" | "ink";
+};
+
+export type FlowNode = {
+  id: string;
+  label: string;
+  description?: string;
+};
+
+export type FlowEdge = {
+  from: string;
+  to: string;
+  label?: string;
+};
+
+export type CaseStudySection = {
+  title: string;
+  description: string;
+  bullets: string[];
+};
+
+export type FlowDiagram = {
+  title: string;
+  description: string;
+  nodes: FlowNode[];
+  edges: FlowEdge[];
+};
+
+export type CaseStudy = {
+  projectSlug: string;
+  overview: string;
+  role: string;
+  coreSystems: CaseStudySection[];
+  architecture: FlowDiagram;
+  optimization: CaseStudySection;
+  sdkIntegrations: FlowDiagram;
+  multiplayer?: FlowDiagram;
+  monetization?: FlowDiagram;
+  lessonsLearned: string[];
+  demoSlug?: string;
 };

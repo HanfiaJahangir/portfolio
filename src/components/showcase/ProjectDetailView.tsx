@@ -1,5 +1,8 @@
 import Image from "next/image";
 import type { Project } from "@/types/portfolio";
+import { getCaseStudyByProjectSlug } from "@/data/caseStudies";
+import { getDemoModuleBySlug } from "@/data/demoModules";
+import { CaseStudyModule } from "@/components/showcase/CaseStudyModule";
 import { MediaGallery } from "@/components/gallery/MediaGallery";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageSection } from "@/components/layout/PageSection";
@@ -11,6 +14,9 @@ type ProjectDetailViewProps = {
 };
 
 export function ProjectDetailView({ project }: ProjectDetailViewProps) {
+  const caseStudy = getCaseStudyByProjectSlug(project.slug);
+  const demo = caseStudy?.demoSlug ? getDemoModuleBySlug(caseStudy.demoSlug) : undefined;
+
   return (
     <>
       <section className="relative overflow-hidden px-page pb-16 pt-28">
@@ -33,6 +39,11 @@ export function ProjectDetailView({ project }: ProjectDetailViewProps) {
                 <Button href="/projects" variant="secondary">
                   All projects
                 </Button>
+                {demo?.route ? (
+                  <Button href={demo.route} variant="ghost">
+                    Playable demo shell
+                  </Button>
+                ) : null}
               </div>
             </div>
             <div className="grid gap-3 rounded-lg border border-white/10 bg-void/68 p-4 backdrop-blur-xl">
@@ -64,6 +75,14 @@ export function ProjectDetailView({ project }: ProjectDetailViewProps) {
         </PageContainer>
       </PageSection>
 
+      {caseStudy ? (
+        <PageSection spacing="compact">
+          <PageContainer>
+            <CaseStudyModule project={project} caseStudy={caseStudy} />
+          </PageContainer>
+        </PageSection>
+      ) : null}
+
       <PageSection spacing="compact">
         <PageContainer>
           <div className="grid gap-4 lg:grid-cols-3">
@@ -91,12 +110,20 @@ export function ProjectDetailView({ project }: ProjectDetailViewProps) {
                 ))}
               </ul>
             </article>
-            <article className="rounded-lg border border-white/10 bg-white/[0.04] p-5">
+            <article id="demo" className="rounded-lg border border-white/10 bg-white/[0.04] p-5">
               <h2 className="text-xl font-bold text-ink">Future Demo Slot</h2>
               <p className="mt-4 text-sm leading-6 text-muted">
-                This detail page is ready for a lazy-loaded playable mechanic slice, technical
-                diagram, or optimization visualizer.
+                {demo
+                  ? `${demo.title} is available as a lazy-loaded playable mechanic slice.`
+                  : "This detail page is ready for a lazy-loaded playable mechanic slice, technical diagram, or optimization visualizer."}
               </p>
+              {demo?.route ? (
+                <div className="mt-5">
+                  <Button href={demo.route} variant="secondary">
+                    Play demo
+                  </Button>
+                </div>
+              ) : null}
             </article>
             <article className="rounded-lg border border-white/10 bg-white/[0.04] p-5 lg:col-span-3">
               <h2 className="text-xl font-bold text-ink">Production Systems</h2>

@@ -2,6 +2,7 @@ export const routes = {
   home: "/",
   about: "/about",
   projects: "/projects",
+  worlds: "/worlds",
   systems: "/systems",
   contact: "/contact",
   resume: "/resume/Hanfia-Jahangir-Resume.pdf"

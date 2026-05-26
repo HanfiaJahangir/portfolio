@@ -1,4 +1,5 @@
 import { demoModules } from "@/data/demoModules";
+import { Button } from "@/components/ui/Button";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PageSection } from "@/components/layout/PageSection";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -30,6 +31,13 @@ export function DemoLauncher() {
                   </span>
                 ))}
               </div>
+              {demo.route ? (
+                <div className="mt-5">
+                  <Button href={demo.route} variant="secondary">
+                    Open shell
+                  </Button>
+                </div>
+              ) : null}
             </article>
           ))}
         </div>

@@ -12,6 +12,10 @@ export function CommandNav() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
+  if (pathname === "/demos/bike-drift-mechanic") {
+    return null;
+  }
+
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-void/78 px-4 backdrop-blur-xl">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4">

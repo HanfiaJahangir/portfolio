@@ -2,6 +2,8 @@ import Image from "next/image";
 import type { Project } from "@/types/portfolio";
 import { Button } from "@/components/ui/Button";
 import { MetricPill } from "@/components/ui/MetricPill";
+import { getCaseStudyByProjectSlug } from "@/data/caseStudies";
+import { getDemoModuleBySlug } from "@/data/demoModules";
 import { imageSizes } from "@/systems/performance/images";
 
 type ProjectTerminalCardProps = {
@@ -9,8 +11,11 @@ type ProjectTerminalCardProps = {
 };
 
 export function ProjectTerminalCard({ project }: ProjectTerminalCardProps) {
+  const caseStudy = getCaseStudyByProjectSlug(project.slug);
+  const demo = caseStudy?.demoSlug ? getDemoModuleBySlug(caseStudy.demoSlug) : undefined;
+
   return (
-    <article className="group overflow-hidden rounded-lg border border-white/10 bg-panel/80 shadow-command transition duration-300 hover:-translate-y-1 hover:border-signal/45">
+    <article className="group overflow-hidden rounded-lg border border-white/10 bg-panel/80 shadow-command transition duration-300 hover:-translate-y-1 hover:border-signal/45 hover:shadow-glow">
       <div className="relative aspect-[16/9] overflow-hidden">
         <Image
           src={project.image}
@@ -38,6 +43,12 @@ export function ProjectTerminalCard({ project }: ProjectTerminalCardProps) {
       </div>
       <div className="grid gap-5 p-5">
         <p className="text-sm leading-6 text-muted">{project.summary}</p>
+        <div className="rounded-md border border-white/10 bg-void/45 p-3">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-reactor">
+            Engineering highlight
+          </p>
+          <p className="mt-2 text-sm leading-6 text-ink">{project.engineeringHighlights[0]}</p>
+        </div>
         <div className="grid grid-cols-3 gap-2">
           {project.metrics.slice(0, 3).map((metric) => (
             <MetricPill key={`${project.slug}-${metric.label}`} {...metric} />
@@ -55,6 +66,9 @@ export function ProjectTerminalCard({ project }: ProjectTerminalCardProps) {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button href={`/projects/${project.slug}`}>Open terminal</Button>
+          <Button href={demo?.route ?? `/projects/${project.slug}#demo`} variant="ghost">
+            {demo?.route ? "Play demo" : "Demo slot"}
+          </Button>
           {project.playStoreUrl ? (
             <Button
               href={project.playStoreUrl}

@@ -104,6 +104,83 @@ function SystemPanels({ count }: { count: number }) {
   );
 }
 
+function ParticleField({ enabled }: { enabled: boolean }) {
+  const groupRef = useRef<Group>(null);
+
+  useFrame((state, delta) => {
+    if (!enabled || !groupRef.current) {
+      return;
+    }
+
+    groupRef.current.rotation.y += delta * 0.018;
+    groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.35) * 0.04;
+  });
+
+  if (!enabled) {
+    return null;
+  }
+
+  const particles: Array<[number, number, number]> = [
+    [-4.2, 1.8, -1.3],
+    [-3.4, -0.2, -1.8],
+    [-2.1, 2.2, -1.1],
+    [1.8, 1.9, -1.4],
+    [3.2, -0.1, -1.8],
+    [4.3, 1.3, -1.2],
+    [-0.4, 2.55, -1.6],
+    [0.9, -1.1, -1.7]
+  ];
+
+  return (
+    <group ref={groupRef}>
+      {particles.map((position) => (
+        <mesh key={position.join("-")} position={position}>
+          <sphereGeometry args={[0.035, 10, 10]} />
+          <meshStandardMaterial
+            color="#38f2c2"
+            emissive="#38f2c2"
+            emissiveIntensity={0.85}
+            transparent
+            opacity={0.75}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+function ProjectTerminals({ enabled }: { enabled: boolean }) {
+  if (!enabled) {
+    return null;
+  }
+
+  const positions: Array<[number, number, number]> = [
+    [-4.25, -1.05, 0.15],
+    [-1.55, -1.22, 0.42],
+    [1.55, -1.22, 0.42],
+    [4.25, -1.05, 0.15]
+  ];
+
+  return (
+    <>
+      {positions.map((position, index) => (
+        <Float key={position.join("-")} speed={0.75 + index * 0.08} floatIntensity={0.12}>
+          <mesh position={position} rotation={[-0.15, index < 2 ? 0.18 : -0.18, 0]}>
+            <boxGeometry args={[1.2, 0.28, 0.08]} />
+            <meshStandardMaterial
+              color="#0b111d"
+              emissive={index % 2 === 0 ? "#062f2a" : "#33230a"}
+              emissiveIntensity={0.55}
+              roughness={0.38}
+              metalness={0.25}
+            />
+          </mesh>
+        </Float>
+      ))}
+    </>
+  );
+}
+
 function AtmosphereRings({ enabled }: { enabled: boolean }) {
   const groupRef = useRef<Group>(null);
 
@@ -164,8 +241,10 @@ export function AmbientCommandScene({ tier = "desktop" }: AmbientCommandScenePro
       <pointLight position={[2.8, -0.7, 2.1]} color="#f7b955" intensity={2.25} distance={7.5} />
       <group rotation={[-0.08, -0.3, 0]} scale={settings.sceneScale}>
         <AtmosphereRings enabled={settings.enableAtmosphere} />
+        <ParticleField enabled={settings.enableAtmosphere} />
         <ReactorNode />
         <SystemPanels count={settings.panelCount} />
+        <ProjectTerminals enabled={tier === "desktop"} />
       </group>
       <Grid
         position={[0, tier === "desktop" ? -1.65 : -1.5, 0]}

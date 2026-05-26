@@ -32,7 +32,7 @@ export function CinematicHero() {
               {profile.role}
             </p>
             <h1 className="mt-5 text-h1 font-black text-ink xl:max-w-5xl">
-              Gameplay systems, mobile performance, and multiplayer-ready Unity architecture.
+              Senior Unity systems engineer shipping gameplay architecture at production scale.
             </h1>
             <p className="mt-6 max-w-2xl text-lead text-muted lg:max-w-3xl">{profile.intro}</p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -41,7 +41,10 @@ export function CinematicHero() {
                 Inspect systems
               </Button>
               <Button href={profile.resume} variant="ghost" target="_blank" rel="noreferrer">
-                Resume
+                Download Resume
+              </Button>
+              <Button href="/contact" variant="ghost">
+                Contact
               </Button>
             </div>
           </motion.div>
@@ -95,8 +98,8 @@ export function CinematicHero() {
 
         {isDense ? (
           <div className="pointer-events-none absolute bottom-44 right-0 hidden max-w-sm rounded-lg border border-signal/20 bg-signal/10 p-4 text-sm leading-6 text-ink backdrop-blur-xl xl:block">
-            Desktop cinematic mode enabled: richer environment, wider composition, subtle camera
-            response, and recruiter navigation preserved.
+            Desktop cinematic mode: project terminals, systems lab, ambient camera response, and
+            recruiter navigation preserved.
           </div>
         ) : null}
       </div>

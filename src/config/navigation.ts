@@ -10,6 +10,7 @@ export type NavigationItem = {
 
 export const primaryNavigation: NavigationItem[] = [
   { label: "Home", href: routes.home, description: "Overview" },
+  { label: "Worlds", href: routes.worlds, description: "Interactive zones" },
   { label: "Projects", href: routes.projects, description: "Case studies" },
   { label: "Systems", href: routes.systems, description: "Engineering capabilities" },
   { label: "About", href: routes.about, description: "Profile" },
