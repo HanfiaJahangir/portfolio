@@ -1,0 +1,13 @@
+:root {
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --color-void: #05070d;
+  --color-panel: #0b111d;
+  --color-panel-soft: #101827;
+  --color-signal: #38f2c2;
+  --color-reactor: #f7b955;
+  --color-ink: #e8eefb;
+  --color-muted: #7e8da3;
+  color-scheme: dark;
+}

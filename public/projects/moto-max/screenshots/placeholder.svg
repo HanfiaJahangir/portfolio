@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#101827"/><stop offset="1" stop-color="#44220b"/></linearGradient></defs>
+  <rect width="1280" height="720" fill="url(#g)"/>
+  <path d="M120 540 C300 420 420 420 620 500 C800 570 930 570 1160 420" fill="none" stroke="#f7b955" stroke-width="18" opacity=".55"/>
+  <circle cx="482" cy="450" r="70" fill="#05070d" stroke="#38f2c2" stroke-width="12"/>
+  <circle cx="780" cy="450" r="70" fill="#05070d" stroke="#38f2c2" stroke-width="12"/>
+  <path d="M475 440 L610 330 L735 440 L595 430 Z" fill="#38f2c2" opacity=".85"/>
+  <text x="80" y="120" fill="#e8eefb" font-family="Arial" font-size="64" font-weight="800">MOTO MAX</text>
+  <text x="84" y="170" fill="#f7b955" font-family="Arial" font-size="24" letter-spacing="6">RACING SYSTEMS SHOWCASE</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#05070d"/><stop offset="1" stop-color="#142844"/></linearGradient></defs>
+  <rect width="1280" height="720" fill="url(#g)"/>
+  <path d="M80 600 C320 420 580 700 780 480 C930 315 1080 330 1220 260" fill="none" stroke="#38f2c2" stroke-width="20" opacity=".5"/>
+  <path d="M430 430 L590 355 L755 445 L560 455 Z" fill="#f7b955" opacity=".88"/>
+  <circle cx="470" cy="458" r="58" fill="#05070d" stroke="#38f2c2" stroke-width="10"/>
+  <circle cx="720" cy="458" r="58" fill="#05070d" stroke="#38f2c2" stroke-width="10"/>
+  <text x="80" y="120" fill="#e8eefb" font-family="Arial" font-size="64" font-weight="800">BIKE DRIFT MASTER</text>
+  <text x="84" y="170" fill="#38f2c2" font-family="Arial" font-size="24" letter-spacing="6">DRIFT PHYSICS TERMINAL</text>
+</svg>

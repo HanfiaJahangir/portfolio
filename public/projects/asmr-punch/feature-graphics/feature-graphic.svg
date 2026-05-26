@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs><radialGradient id="g" cx=".45" cy=".45" r=".75"><stop stop-color="#2e1725"/><stop offset="1" stop-color="#05070d"/></radialGradient></defs>
+  <rect width="1280" height="720" fill="url(#g)"/>
+  <path d="M760 220 C850 250 890 335 850 430 C800 550 610 550 560 420 C520 310 610 210 760 220 Z" fill="#f7b955" opacity=".78"/>
+  <path d="M330 430 L545 340 L575 420 L360 520 Z" fill="#38f2c2" opacity=".85"/>
+  <circle cx="720" cy="360" r="20" fill="#05070d"/><circle cx="790" cy="360" r="20" fill="#05070d"/>
+  <text x="80" y="120" fill="#e8eefb" font-family="Arial" font-size="64" font-weight="800">ASMR PUNCH</text>
+  <text x="84" y="170" fill="#f7b955" font-family="Arial" font-size="24" letter-spacing="6">INTERACTION FEEDBACK</text>
+</svg>

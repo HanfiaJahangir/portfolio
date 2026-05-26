@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs><radialGradient id="g" cx=".5" cy=".4" r=".7"><stop stop-color="#174033"/><stop offset="1" stop-color="#05070d"/></radialGradient></defs>
+  <rect width="1280" height="720" fill="url(#g)"/>
+  <circle cx="800" cy="250" r="150" fill="#38f2c2" opacity=".15"/>
+  <path d="M500 520 L620 260 L750 520 Z" fill="#38f2c2" opacity=".8"/>
+  <circle cx="610" cy="330" r="36" fill="#05070d"/>
+  <circle cx="715" cy="460" r="42" fill="#f7b955" opacity=".75"/>
+  <text x="80" y="120" fill="#e8eefb" font-family="Arial" font-size="64" font-weight="800">ALIEN SURVIVOR</text>
+  <text x="84" y="170" fill="#38f2c2" font-family="Arial" font-size="24" letter-spacing="6">COMBAT LOOP SHOWCASE</text>
+</svg>

@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+build
+coverage
+.npm-cache
+package-lock.json
+public
+src/Assets
+Images
