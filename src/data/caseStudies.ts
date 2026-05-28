@@ -2,6 +2,198 @@ import type { CaseStudy } from "@/types/portfolio";
 
 export const caseStudies: CaseStudy[] = [
   {
+    projectSlug: "pollen-pop",
+    overview:
+      "Pollen Pop is presented as a live match-three systems case study: readable board resolution, boosters, reward pacing, PVP/tournament flow, Web3 integrations, and economy events around a candy puzzle core.",
+    role: "Senior Unity Gameplay Engineer",
+    coreSystems: [
+      {
+        title: "Match-3 Board Systems",
+        description:
+          "The core board loop depends on predictable swap validation, match detection, cascades, refills, and feedback timing.",
+        bullets: ["Swap validation", "Match resolver", "Cascade handling", "Board refill"]
+      },
+      {
+        title: "Boosters and Rewards",
+        description:
+          "Boosters turn board events into satisfying power moments while feeding rewards and economy progression.",
+        bullets: ["Booster charge", "Reward events", "Daily goals", "Leaderboard payouts"]
+      },
+      {
+        title: "PVP and Live Modes",
+        description:
+          "The same board resolver can support free play, story goals, tournaments, PVP scoring, and prize modes.",
+        bullets: ["PVP flow", "Tournament scoring", "Mode contracts", "Live event hooks"]
+      }
+    ],
+    architecture: {
+      title: "Match-3 Session Architecture",
+      description:
+        "Board actions resolve into cascades, rewards, leaderboard events, and economy updates through clean gameplay contracts.",
+      nodes: [
+        { id: "input", label: "Swap Input" },
+        { id: "board", label: "Board Resolver" },
+        { id: "cascade", label: "Cascade Chain" },
+        { id: "boosters", label: "Boosters" },
+        { id: "score", label: "Score / PVP" },
+        { id: "economy", label: "Rewards / Economy" }
+      ],
+      edges: [
+        { from: "input", to: "board", label: "requests" },
+        { from: "board", to: "cascade", label: "clears" },
+        { from: "cascade", to: "boosters", label: "charges" },
+        { from: "cascade", to: "score", label: "scores" },
+        { from: "score", to: "economy", label: "resolves" }
+      ]
+    },
+    optimization: {
+      title: "Puzzle Runtime Strategy",
+      description:
+        "A match-three loop benefits from deterministic board steps, limited visual burst budgets, and clean separation between animation and reward logic.",
+      bullets: [
+        "Deterministic board resolution",
+        "Animation and logic separation",
+        "Reusable booster events",
+        "Small mobile-friendly board updates"
+      ]
+    },
+    sdkIntegrations: {
+      title: "Backend and Reward Boundary",
+      description:
+        "Backend, Web3, and reward systems subscribe to completed gameplay events without coupling to tile-level board logic.",
+      nodes: [
+        { id: "gameplay", label: "Gameplay Events" },
+        { id: "backend", label: "Firebase / Backend" },
+        { id: "pvp", label: "PVP / Tournament" },
+        { id: "web3", label: "Web3 Rewards" },
+        { id: "liveops", label: "LiveOps" }
+      ],
+      edges: [
+        { from: "gameplay", to: "backend", label: "publishes" },
+        { from: "backend", to: "pvp", label: "updates" },
+        { from: "backend", to: "web3", label: "rewards" },
+        { from: "backend", to: "liveops", label: "configures" }
+      ]
+    },
+    multiplayer: {
+      title: "PVP Match Flow",
+      description:
+        "Competitive puzzle play is framed as a scoring and reward flow around the same validated board events.",
+      nodes: [
+        { id: "player", label: "Player Board" },
+        { id: "events", label: "Score Events" },
+        { id: "server", label: "Session Service" },
+        { id: "leaderboard", label: "Leaderboard" }
+      ],
+      edges: [
+        { from: "player", to: "events" },
+        { from: "events", to: "server" },
+        { from: "server", to: "leaderboard" }
+      ]
+    },
+    monetization: {
+      title: "Reward Economy Flow",
+      description:
+        "Boosters, tournament rewards, milestones, and prize modes are surfaced through clean session boundaries.",
+      nodes: [
+        { id: "result", label: "Board Result" },
+        { id: "reward", label: "Reward Resolver" },
+        { id: "boosters", label: "Booster Surface" },
+        { id: "economy", label: "Economy State" }
+      ],
+      edges: [
+        { from: "result", to: "reward" },
+        { from: "reward", to: "boosters" },
+        { from: "reward", to: "economy" }
+      ]
+    },
+    lessonsLearned: [
+      "Match-three projects stay maintainable when board logic is separated from mode and reward logic.",
+      "Boosters should be treated as gameplay events, not one-off visual scripts.",
+      "PVP and Web3 layers need stable gameplay event contracts to avoid fragile integrations."
+    ],
+    demoSlug: "pollen-pop-match3-slice"
+  },
+  {
+    projectSlug: "bat-super-hero",
+    overview:
+      "Bat Super Hero is presented as a transformation mission case study: bike traversal, robot combat, flight access, rescue objectives, open-city mission flow, and monetized mobile action pacing.",
+    role: "Unity Gameplay Developer",
+    coreSystems: [
+      {
+        title: "Transformation Controller",
+        description:
+          "Multiple player forms require clean mode switching across bike traversal, robot combat, and flying access.",
+        bullets: ["Bike mode", "Robot mode", "Flight mode", "Shared input adapter"]
+      },
+      {
+        title: "Mission Flow",
+        description:
+          "City rescue and combat objectives need readable state transitions for short mobile sessions.",
+        bullets: ["Rescue triggers", "Enemy bot events", "Objective gates", "Completion state"]
+      },
+      {
+        title: "Mobile Action Feedback",
+        description:
+          "Transformation powers, driving, flying, and robot fights are presented as clear feedback events.",
+        bullets: ["Mode feedback", "Combat feedback", "Rescue feedback", "Energy pacing"]
+      }
+    ],
+    architecture: {
+      title: "Transformation Mission Architecture",
+      description:
+        "A shared session layer routes input into the active form, mission gates, and reward events.",
+      nodes: [
+        { id: "input", label: "Input Adapter" },
+        { id: "mode", label: "Active Form" },
+        { id: "mission", label: "Mission State" },
+        { id: "combat", label: "Combat / Rescue" },
+        { id: "feedback", label: "UI / FX Feedback" },
+        { id: "reward", label: "Reward Surface" }
+      ],
+      edges: [
+        { from: "input", to: "mode", label: "drives" },
+        { from: "mode", to: "mission", label: "gates" },
+        { from: "mission", to: "combat", label: "resolves" },
+        { from: "combat", to: "feedback", label: "emits" },
+        { from: "mission", to: "reward", label: "completes" }
+      ]
+    },
+    optimization: {
+      title: "Open-City Mobile Stability",
+      description:
+        "Transformation games need predictable objective, combat, and traversal updates so the city remains readable on mid-tier phones.",
+      bullets: [
+        "Mode-specific update budgets",
+        "Objective trigger discipline",
+        "Reusable mission events",
+        "Feedback-limited action moments"
+      ]
+    },
+    sdkIntegrations: {
+      title: "Mission Event Boundary",
+      description:
+        "Ads, rewards, and analytics subscribe to mission events rather than living inside transformation logic.",
+      nodes: [
+        { id: "mission", label: "Mission Events" },
+        { id: "analytics", label: "Analytics" },
+        { id: "ads", label: "Ads / IAP" },
+        { id: "reward", label: "Reward Flow" }
+      ],
+      edges: [
+        { from: "mission", to: "analytics" },
+        { from: "mission", to: "ads" },
+        { from: "mission", to: "reward" }
+      ]
+    },
+    lessonsLearned: [
+      "Transformation projects need a shared input and state boundary before adding forms.",
+      "Mission gates make complex form abilities readable for players and maintainable for engineers.",
+      "Ads and reward systems should live at mission boundaries, not inside combat or traversal."
+    ],
+    demoSlug: "bat-hero-transform-mission"
+  },
+  {
     projectSlug: "moto-max",
     overview:
       "Moto Max is presented as a production racing case study: multiple race modes, mobile control schemes, AI competition, garage progression, audio feedback, monetization, and performance-sensitive mobile delivery.",

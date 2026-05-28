@@ -10,14 +10,16 @@ type ButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 
 const variants = {
   primary:
-    "border-signal/70 bg-signal text-void shadow-glow hover:border-signal hover:bg-[#7fffe0]",
-  secondary: "border-white/15 bg-white/[0.07] text-ink hover:border-signal/50 hover:bg-white/[0.1]",
-  ghost: "border-transparent bg-transparent text-muted hover:border-white/10 hover:text-ink"
+    "border-signal/70 bg-signal text-void shadow-glow hover:-translate-y-0.5 hover:border-signal hover:bg-[#7fffe0] active:translate-y-0 active:scale-[0.98]",
+  secondary:
+    "border-white/15 bg-white/[0.07] text-ink hover:-translate-y-0.5 hover:border-signal/50 hover:bg-white/[0.1] active:translate-y-0 active:scale-[0.98]",
+  ghost:
+    "border-transparent bg-transparent text-muted hover:-translate-y-0.5 hover:border-white/10 hover:text-ink active:translate-y-0 active:scale-[0.98]"
 };
 
 export function Button({ href, children, variant = "primary", className, ...props }: ButtonProps) {
   const sharedClassName = cn(
-    "inline-flex min-h-11 items-center justify-center rounded-md border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-signal/60",
+    "inline-flex min-h-11 items-center justify-center rounded-md border px-4 py-2 text-sm font-semibold transition duration-200 ease-out will-change-transform focus:outline-none focus:ring-2 focus:ring-signal/60",
     variants[variant],
     className
   );

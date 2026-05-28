@@ -6,6 +6,8 @@ import { useRef } from "react";
 import type { Group, Mesh } from "three";
 import { experienceTiers, type ExperienceTier } from "@/config/experience";
 import { webglPerformance } from "@/systems/performance/rendering";
+import { prepareWebGLContext, releaseWebGLContext } from "@/systems/performance/webglLifecycle";
+import { usePageVisible } from "@/hooks/usePageVisible";
 
 function CameraDrift({ enabled }: { enabled: boolean }) {
   const rigRef = useRef<Group>(null);
@@ -15,8 +17,10 @@ function CameraDrift({ enabled }: { enabled: boolean }) {
       return;
     }
 
-    rigRef.current.rotation.y = state.pointer.x * 0.08;
-    rigRef.current.rotation.x = -state.pointer.y * 0.04;
+    const intro = Math.min(1, state.clock.elapsedTime / 2.8);
+    const ease = 1 - Math.pow(1 - intro, 3);
+    rigRef.current.rotation.y = -0.18 * (1 - ease) + state.pointer.x * 0.08;
+    rigRef.current.rotation.x = 0.08 * (1 - ease) - state.pointer.y * 0.04;
   });
 
   return <group ref={rigRef} />;
@@ -221,13 +225,20 @@ type AmbientCommandSceneProps = {
 
 export function AmbientCommandScene({ tier = "desktop" }: AmbientCommandSceneProps) {
   const settings = experienceTiers[tier];
+  const isPageVisible = usePageVisible();
+  const frameloop = isPageVisible && tier !== "mobile" ? "always" : "demand";
 
   return (
     <Canvas
       dpr={settings.dpr}
       gl={webglPerformance.glOptions}
       className="h-full w-full"
-      frameloop="always"
+      frameloop={frameloop}
+      performance={{ min: 0.45 }}
+      onCreated={(state) => {
+        prepareWebGLContext(state);
+        return () => releaseWebGLContext(state.gl);
+      }}
     >
       <PerspectiveCamera
         makeDefault

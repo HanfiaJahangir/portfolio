@@ -55,8 +55,8 @@ export function LightweightDemoSurface({ demo }: LightweightDemoSurfaceProps) {
             className="mt-4 w-full"
           />
           <p className="mt-4 text-sm leading-6 text-muted">
-            This is an isolated demo shell. Future modules can replace the center surface with R3F,
-            DOM, or Unity WebGL content without changing the project page.
+            This systems surface keeps interaction logic isolated from project pages, preserving
+            fast navigation while showing input, state, feedback, and metrics flow.
           </p>
         </div>
       </div>

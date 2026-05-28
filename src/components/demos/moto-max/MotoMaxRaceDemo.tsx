@@ -8,11 +8,16 @@ import { TouchControls } from "@/components/demos/bike-drift/TouchControls";
 import { useVehicleInput } from "@/components/demos/bike-drift/useVehicleInput";
 import type { VehicleInputState } from "@/components/demos/bike-drift/types";
 import { webglPerformance } from "@/systems/performance/rendering";
+import { prepareWebGLContext, releaseWebGLContext } from "@/systems/performance/webglLifecycle";
 
 type RaceState = {
   progress: number;
   speed: number;
   lane: number;
+  x: number;
+  z: number;
+  heading: number;
+  distance: number;
   drift: number;
   rank: number;
   finished: boolean;
@@ -26,11 +31,15 @@ const initialRaceState: RaceState = {
   progress: 0,
   speed: 0,
   lane: 0,
+  x: -54,
+  z: -94,
+  heading: 0,
+  distance: 0,
   drift: 0,
   rank: 3,
   finished: false,
   finishTime: 0,
-  aiProgress: [0, 0],
+  aiProgress: [0, 0, 0, 0],
   countdown: 3.8,
   raceStarted: false
 };
@@ -57,6 +66,11 @@ export function MotoMaxRaceDemo() {
         camera={{ position: [0, 7, -11], fov: 58, near: 0.1, far: 220 }}
         dpr={webglPerformance.dpr}
         gl={webglPerformance.glOptions}
+        performance={{ min: 0.45 }}
+        onCreated={(state) => {
+          prepareWebGLContext(state);
+          return () => releaseWebGLContext(state.gl);
+        }}
         className="h-full w-full"
       >
         <Suspense fallback={null}>
@@ -77,24 +91,38 @@ export function MotoMaxRaceDemo() {
             raceRef={raceRef}
             resetSignal={resetSignal}
             color="#f7b955"
-            startProgress={0}
-            speed={24.8}
-            lane={-2.2}
+            speed={29.5}
+            lane={-3.8}
           />
           <AiRacer
             index={1}
             raceRef={raceRef}
             resetSignal={resetSignal}
             color="#7c8cff"
-            startProgress={0}
-            speed={24.1}
-            lane={2.2}
+            speed={29.1}
+            lane={-1.2}
+          />
+          <AiRacer
+            index={2}
+            raceRef={raceRef}
+            resetSignal={resetSignal}
+            color="#ff5a78"
+            speed={28.8}
+            lane={1.4}
+          />
+          <AiRacer
+            index={3}
+            raceRef={raceRef}
+            resetSignal={resetSignal}
+            color="#38f2c2"
+            speed={28.4}
+            lane={3.8}
           />
           <RaceCamera raceRef={raceRef} />
         </Suspense>
       </Canvas>
       <RaceHud telemetry={telemetry} onReset={resetRace} />
-      <TouchControls setInput={setInput} />
+      <TouchControls setInput={setInput} context="race" />
     </div>
   );
 }
@@ -133,7 +161,10 @@ function RaceController({
       race.finishTime += delta;
     }
 
-    const pose = getTrackPose(race.progress, race.lane);
+    const pose = {
+      position: new Vector3(race.x, 0.12, race.z),
+      heading: race.heading
+    };
 
     if (groupRef.current) {
       groupRef.current.position.copy(pose.position);
@@ -167,11 +198,27 @@ function updateRace(race: RaceState, input: VehicleInputState, delta: number) {
     race.speed -= Math.min(race.speed, 4.2 * delta);
   }
 
-  race.speed = Math.max(0, Math.min(34, race.speed));
-  race.lane += steer * (4.8 + race.speed * 0.14) * (1 + race.drift * 0.55) * delta;
-  race.lane += (0 - race.lane) * delta * 0.45;
-  race.lane = Math.max(-4.2, Math.min(4.2, race.lane));
-  race.progress += (race.speed * (1 + race.drift * 0.08) * delta) / trackLength;
+  race.speed = Math.max(0, Math.min(38, race.speed));
+  const speedFactor = race.speed / 38;
+  race.heading += steer * (1.15 + speedFactor * 1.35) * (1 + race.drift * 0.7) * delta;
+  const step = race.speed * (1 + race.drift * 0.08) * delta;
+  race.x += Math.sin(race.heading) * step;
+  race.z += Math.cos(race.heading) * step;
+  race.distance += step;
+  const nearest = getNearestTrackProgress(new Vector3(race.x, 0.12, race.z));
+  race.progress = Math.max(race.progress, nearest.progress);
+  const trackLimit = 6.2;
+  if (nearest.distanceFromCenter > trackLimit) {
+    const correction = nearest.normal
+      .clone()
+      .multiplyScalar(nearest.signedLane - Math.sign(nearest.signedLane) * trackLimit);
+    race.x -= correction.x;
+    race.z -= correction.z;
+    race.heading += -Math.sign(nearest.signedLane) * delta * 0.75;
+  }
+  const trackPenalty = nearest.distanceFromCenter > trackLimit ? 0.88 : 1;
+  race.speed *= trackPenalty;
+  race.lane = Math.max(-6, Math.min(6, nearest.signedLane));
   race.rank = 1 + race.aiProgress.filter((progress) => progress > race.progress).length;
 
   if (race.progress >= 1) {
@@ -187,7 +234,10 @@ function RaceCamera({ raceRef }: { raceRef: React.MutableRefObject<RaceState> })
   useFrame((_, delta) => {
     const perspectiveCamera = camera instanceof PerspectiveCamera ? camera : null;
     const race = raceRef.current;
-    const pose = getTrackPose(race.progress, race.lane);
+    const pose = {
+      position: new Vector3(race.x, 0.12, race.z),
+      heading: race.heading
+    };
     const back = new Vector3(Math.sin(pose.heading), 0, Math.cos(pose.heading)).multiplyScalar(
       -10.5
     );
@@ -213,7 +263,6 @@ function AiRacer({
   raceRef,
   resetSignal,
   color,
-  startProgress,
   speed,
   lane
 }: {
@@ -221,12 +270,11 @@ function AiRacer({
   raceRef: React.MutableRefObject<RaceState>;
   resetSignal: number;
   color: string;
-  startProgress: number;
   speed: number;
   lane: number;
 }) {
   const ref = useRef<Group>(null);
-  const progressRef = useRef(startProgress);
+  const progressRef = useRef(0);
   const lastReset = useRef(resetSignal);
 
   useFrame((_, delta) => {
@@ -237,12 +285,13 @@ function AiRacer({
     const race = raceRef.current;
 
     if (lastReset.current !== resetSignal) {
-      progressRef.current = startProgress;
+      progressRef.current = 0;
       lastReset.current = resetSignal;
     }
 
     if (race.raceStarted && !race.finished) {
-      const rubberBand = race.progress > progressRef.current ? 1.05 : 0.96;
+      const gap = race.progress - progressRef.current;
+      const rubberBand = gap > 0.08 ? 1.16 : gap < -0.08 ? 0.9 : 1;
       progressRef.current = Math.min(
         1,
         progressRef.current + (speed * rubberBand * delta) / trackLength
@@ -252,7 +301,9 @@ function AiRacer({
     race.aiProgress[index] = progressRef.current;
     const playerProgress = race.progress;
     const avoidanceLane =
-      Math.abs(progressRef.current - playerProgress) < 0.035 ? lane * 1.25 : lane;
+      Math.abs(progressRef.current - playerProgress) < 0.035
+        ? lane + Math.sign(lane || 1) * 1.2
+        : lane;
     const pose = getTrackPose(progressRef.current, avoidanceLane);
     ref.current.position.copy(pose.position);
     ref.current.rotation.set(0, pose.heading, 0);
@@ -477,6 +528,33 @@ function getTrackPose(progress: number, lane: number) {
   const position = center.add(normal.multiplyScalar(lane));
   const heading = Math.atan2(tangent.x, tangent.z);
   return { position, heading };
+}
+
+function getNearestTrackProgress(position: Vector3) {
+  let bestIndex = 0;
+  let bestDistance = Number.POSITIVE_INFINITY;
+
+  for (let index = 0; index < trackPoints.length; index += 1) {
+    const distance = position.distanceTo(trackPoints[index].position);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = index;
+    }
+  }
+
+  const current = trackPoints[bestIndex];
+  const next = trackPoints[Math.min(trackPoints.length - 1, bestIndex + 1)];
+  const tangent = next.position.clone().sub(current.position).normalize();
+  const toPlayer = position.clone().sub(current.position);
+  const normal = new Vector3(tangent.z, 0, -tangent.x);
+  const signedLane = toPlayer.dot(normal);
+
+  return {
+    progress: current.distance / trackLength,
+    signedLane,
+    distanceFromCenter: Math.abs(signedLane),
+    normal
+  };
 }
 
 function buildCircuitPath() {

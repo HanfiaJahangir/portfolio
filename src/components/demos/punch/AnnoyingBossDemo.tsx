@@ -1,47 +1,49 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-type PunchPhase = "idle" | "charging" | "launch" | "impact" | "retract" | "complete";
+type PunchPhase = "idle" | "charging" | "launch" | "impact" | "retract";
 
-type StageConfig = {
-  title: string;
-  setup: string;
-  targets: Array<{ label: string; x: number; y: number; move?: boolean }>;
+type Target = {
+  label: string;
+  x: number;
+  y: number;
+  depth: number;
+  move?: boolean;
 };
 
-const stages: StageConfig[] = [
+const stages: Array<{ title: string; setup: string; targets: Target[] }> = [
   {
     title: "Boss on Chair",
-    setup: "Charge, release, and send the boss flying backward.",
-    targets: [{ label: "Boss", x: 76, y: 54 }]
+    setup: "Hold to charge. Release to punch forward through the room.",
+    targets: [{ label: "Boss", x: 52, y: 42, depth: 76 }]
   },
   {
     title: "Shouting Match",
-    setup: "Punch the boss, then the colleague for a two-hit reaction chain.",
+    setup: "Two targets at different depths. Punch through the scene, not sideways.",
     targets: [
-      { label: "Boss", x: 72, y: 48 },
-      { label: "Staff", x: 84, y: 58 }
+      { label: "Boss", x: 46, y: 42, depth: 72 },
+      { label: "Staff", x: 62, y: 48, depth: 84 }
     ]
   },
   {
     title: "Triangle Meeting",
-    setup: "Clear three seated targets with quick charged hits.",
+    setup: "Clear layered office targets with quick charged hits.",
     targets: [
-      { label: "A", x: 68, y: 42 },
-      { label: "B", x: 80, y: 57 },
-      { label: "C", x: 62, y: 66 }
+      { label: "A", x: 40, y: 50, depth: 66 },
+      { label: "B", x: 58, y: 39, depth: 78 },
+      { label: "C", x: 70, y: 55, depth: 90 }
     ]
   },
   {
     title: "Jumping Boss",
-    setup: "Time the punch while the boss moves around the room.",
-    targets: [{ label: "Boss", x: 78, y: 48, move: true }]
+    setup: "Time the release while the boss moves in depth.",
+    targets: [{ label: "Boss", x: 55, y: 40, depth: 82, move: true }]
   },
   {
     title: "Final Phone Call",
-    setup: "Build a huge charge and land the final cinematic punch.",
-    targets: [{ label: "Boss", x: 80, y: 52 }]
+    setup: "Build a huge charge and launch the final glove straight into the room.",
+    targets: [{ label: "Boss", x: 52, y: 40, depth: 88 }]
   }
 ];
 
@@ -56,8 +58,17 @@ export function AnnoyingBossDemo() {
   const stage = stages[stageIndex];
   const target = stage.targets[targetIndex];
   const stageComplete = targetIndex >= stage.targets.length;
-  const gloveReach = phase === "launch" || phase === "impact" ? target.x - 13 : 10 + charge * 0.58;
-  const impactPower = Math.round(charge);
+  const isFinalComplete = stageIndex === stages.length - 1 && stageComplete;
+  const baseX = 50;
+  const baseY = 84;
+  const aimX = target?.x ?? 50;
+  const aimY = target?.y ?? 42;
+  const aimDepth = target?.depth ?? 82;
+  const travel = phase === "launch" || phase === "impact" ? 1 : phase === "retract" ? 0.18 : 0;
+  const punchX = baseX + (aimX - baseX) * travel;
+  const punchY = baseY + (aimY - baseY) * travel;
+  const punchDepth = travel > 0 ? aimDepth : 12;
+  const chargeScale = 1 + charge / 180;
 
   useEffect(() => {
     if (phase !== "charging") {
@@ -65,7 +76,7 @@ export function AnnoyingBossDemo() {
     }
 
     chargeTimer.current = window.setInterval(() => {
-      setCharge((value) => Math.min(100, value + 2.6));
+      setCharge((value) => Math.min(100, value + 2.8));
     }, 24);
 
     return () => {
@@ -80,7 +91,7 @@ export function AnnoyingBossDemo() {
       return;
     }
 
-    setCharge(10);
+    setCharge(12);
     setPhase("charging");
   }
 
@@ -93,14 +104,14 @@ export function AnnoyingBossDemo() {
     window.setTimeout(() => {
       setPhase("impact");
       setCombo((value) => value + 1);
-      setImpactScore((value) => value + Math.max(8, Math.round(charge * 1.4)));
-    }, 150);
-    window.setTimeout(() => setPhase("retract"), 390);
+      setImpactScore((value) => value + Math.max(10, Math.round(charge * 1.55)));
+    }, 140);
+    window.setTimeout(() => setPhase("retract"), 380);
     window.setTimeout(() => {
       setCharge(0);
       setTargetIndex((value) => value + 1);
       setPhase("idle");
-    }, 660);
+    }, 650);
   }
 
   function nextStage() {
@@ -119,88 +130,104 @@ export function AnnoyingBossDemo() {
     setImpactScore(0);
   }
 
-  const targetPosition = useMemo(() => {
-    if (!target) {
-      return { x: 78, y: 52 };
-    }
-
-    return target;
-  }, [target]);
-
-  const isFinalComplete = stageIndex === stages.length - 1 && stageComplete;
-
   return (
     <div className="overflow-hidden rounded-lg border border-white/10 bg-panel/80 shadow-command">
       <div className="grid gap-0 lg:grid-cols-[1fr_340px]">
         <div
-          className={`relative min-h-[600px] overflow-hidden bg-[radial-gradient(circle_at_78%_44%,rgba(247,185,85,0.2),transparent_20%),linear-gradient(135deg,#070b12,#111827)] transition ${
+          className={`relative min-h-[640px] overflow-hidden bg-[radial-gradient(circle_at_50%_38%,rgba(247,185,85,0.2),transparent_20%),linear-gradient(180deg,#111827,#05070d)] transition ${
             phase === "impact" ? "scale-[1.015]" : ""
           }`}
           onPointerDown={beginCharge}
           onPointerUp={releasePunch}
           onPointerLeave={releasePunch}
         >
-          <div className="absolute inset-0 bg-scan-grid bg-[length:46px_46px] opacity-20" />
+          <div className="absolute inset-0 bg-scan-grid bg-[length:48px_48px] opacity-15" />
+          <div className="absolute inset-x-[12%] bottom-[18%] top-[16%] border-x border-t border-white/10 bg-gradient-to-t from-white/[0.03] to-transparent [clip-path:polygon(20%_0,80%_0,100%_100%,0_100%)]" />
           <div className="absolute left-8 top-8 rounded border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-muted">
             Stage {stageIndex + 1}/5: {stage.title}
           </div>
-          <div className="absolute inset-x-10 bottom-20 h-1 rounded-full bg-white/10" />
-          <div className="absolute bottom-24 left-14 h-28 w-20 rounded-lg border border-signal/35 bg-signal/15 shadow-glow" />
           <div
-            className="absolute bottom-36 left-28 h-10 rounded-full border border-reactor/45 bg-reactor/30 transition-all duration-150"
-            style={{ width: `${gloveReach}%` }}
+            className="absolute h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-signal/35 bg-signal/15 shadow-glow"
+            style={{ left: `${baseX}%`, top: `${baseY}%` }}
           />
+          <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
+            <line
+              x1={`${baseX}%`}
+              y1={`${baseY}%`}
+              x2={`${travel > 0 ? punchX : aimX}%`}
+              y2={`${travel > 0 ? punchY : aimY}%`}
+              stroke="rgba(247,185,85,0.5)"
+              strokeDasharray={travel > 0 ? "0" : "6 8"}
+              strokeLinecap="round"
+              strokeWidth={Math.max(10, 14 + charge * 0.08)}
+            />
+            <line
+              x1={`${baseX}%`}
+              y1={`${baseY}%`}
+              x2={`${punchX}%`}
+              y2={`${punchY}%`}
+              stroke="rgba(56,242,194,0.28)"
+              strokeLinecap="round"
+              strokeWidth={Math.max(4, 5 + charge * 0.04)}
+            />
+          </svg>
           <div
-            className={`absolute bottom-[8.6rem] h-16 w-16 rounded-full border border-reactor/70 bg-reactor shadow-[0_0_34px_rgba(247,185,85,0.35)] transition-all duration-150 ${
+            className={`absolute h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full border border-reactor/70 bg-reactor shadow-[0_0_40px_rgba(247,185,85,0.4)] transition-all duration-150 ${
               phase === "charging" ? "scale-110" : ""
             }`}
-            style={{ left: `calc(7rem + ${gloveReach}%)` }}
+            style={{
+              left: `${punchX}%`,
+              top: `${punchY}%`,
+              transform: `translate(-50%, -50%) scale(${(0.85 + punchDepth / 130) * chargeScale})`
+            }}
           />
-          {target ? (
-            <div
-              className={`absolute grid h-36 w-24 place-items-center rounded-xl border text-center text-sm font-black uppercase transition-all duration-300 ${
-                phase === "impact"
-                  ? "translate-x-16 -translate-y-8 rotate-[22deg] border-danger/50 bg-danger/25 text-danger"
-                  : "border-danger/40 bg-danger/20 text-danger"
-              } ${target.move && phase !== "impact" ? "animate-[boss-hop_1.1s_ease-in-out_infinite]" : ""}`}
-              style={{ left: `${targetPosition.x}%`, top: `${targetPosition.y}%` }}
-            >
-              {target.label}
-            </div>
-          ) : null}
-          {Array.from({ length: 5 }, (_, item) => (
-            <div
-              key={item}
-              className={`absolute h-8 w-8 rounded border border-white/10 bg-white/[0.08] transition duration-300 ${
-                impactScore / 45 > item ? "translate-y-6 rotate-45 opacity-25" : ""
-              }`}
-              style={{ bottom: `${7 + item * 2.7}rem`, right: `${10 + item * 4}rem` }}
-            />
-          ))}
+          {stage.targets.map((item, index) => {
+            const active = index === targetIndex;
+            const defeated = index < targetIndex;
+            return (
+              <div
+                key={`${stage.title}-${item.label}-${index}`}
+                className={`absolute grid h-28 w-20 place-items-center rounded-xl border text-center text-xs font-black uppercase transition-all duration-300 ${
+                  defeated
+                    ? "translate-y-8 rotate-[28deg] border-white/10 bg-white/[0.04] text-muted opacity-30"
+                    : active && phase === "impact"
+                      ? "translate-y-[-28px] scale-110 rotate-[18deg] border-danger/50 bg-danger/25 text-danger"
+                      : "border-danger/40 bg-danger/20 text-danger"
+                } ${item.move && active && phase !== "impact" ? "animate-[depth-hop_1.1s_ease-in-out_infinite]" : ""}`}
+                style={{
+                  left: `${item.x}%`,
+                  top: `${item.y}%`,
+                  transform: `translate(-50%, -50%) scale(${0.62 + item.depth / 150})`
+                }}
+              >
+                {item.label}
+              </div>
+            );
+          })}
           {phase === "charging" ? (
-            <div className="absolute left-28 top-28 rounded-full border border-reactor/40 bg-reactor/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-reactor">
+            <div className="absolute left-1/2 top-[18%] -translate-x-1/2 rounded-full border border-reactor/40 bg-reactor/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-reactor">
               Charging {Math.round(charge)}%
             </div>
           ) : null}
           {phase === "impact" ? (
-            <div className="absolute right-32 top-24 rounded-full border border-reactor/50 bg-reactor/20 px-5 py-3 text-lg font-black uppercase tracking-[0.18em] text-reactor shadow-[0_0_34px_rgba(247,185,85,0.35)]">
-              Smack +{impactPower}
+            <div className="absolute left-1/2 top-[26%] -translate-x-1/2 rounded-full border border-reactor/50 bg-reactor/20 px-5 py-3 text-lg font-black uppercase tracking-[0.18em] text-reactor shadow-[0_0_34px_rgba(247,185,85,0.35)]">
+              Forward Impact +{Math.round(charge)}
             </div>
           ) : null}
           <div className="absolute bottom-6 left-6 right-6 rounded-lg border border-white/10 bg-void/72 p-4 backdrop-blur-xl">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-reactor">
-              Hold to charge, release to punch
+              Hold to charge, release to punch into depth
             </p>
             <p className="mt-2 text-sm leading-6 text-muted">{stage.setup}</p>
           </div>
           <style jsx>{`
-            @keyframes boss-hop {
+            @keyframes depth-hop {
               0%,
               100% {
-                transform: translateY(0);
+                translate: 0 0;
               }
               50% {
-                transform: translateY(-36px);
+                translate: 0 -34px;
               }
             }
           `}</style>
@@ -211,10 +238,10 @@ export function AnnoyingBossDemo() {
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-reactor">
               Annoying Boss
             </p>
-            <h3 className="mt-3 text-2xl font-black text-ink">Elastic punch showcase</h3>
+            <h3 className="mt-3 text-2xl font-black text-ink">Forward elastic punch</h3>
             <p className="mt-3 text-sm leading-6 text-muted">
-              A 5-stage tactile slice focused on charge anticipation, elastic release, hit pause,
-              target reaction, combo timing, and comedic impact.
+              Camera sits behind the glove. The arm loads in place, launches forward into the room,
+              impacts targets at depth, then retracts automatically.
             </p>
           </div>
           <Meter label="Charge" value={charge / 100} text={`${Math.round(charge)}%`} />
@@ -233,23 +260,10 @@ export function AnnoyingBossDemo() {
             </button>
           ) : (
             <p className="rounded-md border border-white/10 bg-white/[0.04] p-3 text-sm leading-6 text-muted">
-              Hold anywhere in the target room, then release. Stronger charge creates bigger impact
-              feedback.
+              Hold anywhere in the room to load the glove. Release to fire forward into the active
+              target lane.
             </p>
           )}
-          {isFinalComplete ? (
-            <div className="rounded-lg border border-reactor/40 bg-reactor/10 p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-reactor">
-                Engineering breakdown
-              </p>
-              <ul className="mt-3 grid gap-2 text-sm text-muted">
-                <li>Input hold/release architecture</li>
-                <li>Elastic anticipation and retraction timing</li>
-                <li>Hit pause, target reaction, and combo feedback</li>
-                <li>Stage flow with lightweight state cleanup</li>
-              </ul>
-            </div>
-          ) : null}
         </aside>
       </div>
     </div>

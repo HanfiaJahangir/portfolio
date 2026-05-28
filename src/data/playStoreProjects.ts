@@ -48,7 +48,7 @@ export const playStoreProjects: Project[] = [
       {
         type: "image",
         src: getProjectAssetPath("moto-max", "featureGraphics", "feature-graphic.svg"),
-        alt: "Moto Max showcase placeholder"
+        alt: "Moto Max racing showcase artwork"
       }
     ]
   },
@@ -66,7 +66,7 @@ export const playStoreProjects: Project[] = [
     storeId: "com.tf.survivor.alien.shooting",
     genre: "Action",
     developer: "Terafort IEG",
-    downloads: "10K+",
+    downloads: "5K+",
     updatedOn: "Dec 10, 2025",
     playStoreUrl: "https://play.google.com/store/apps/details?id=com.tf.survivor.alien.shooting",
     technologies: ["Unity3D", "C#", "Enemy Waves", "Merge Mechanics", "Ads/IAP"],
@@ -89,7 +89,7 @@ export const playStoreProjects: Project[] = [
     impact:
       "Created a shipped action-survival title with readable progression and cinematic combat feel.",
     metrics: [
-      { label: "Downloads", value: "10K+", detail: "Public Play Store download band" },
+      { label: "Downloads", value: "5K+", detail: "Public Play Store download band" },
       { label: "Genre", value: "Action", detail: "Alien survival combat" },
       { label: "Core loop", value: "Merge", detail: "Merge/evolve power progression" }
     ],
@@ -97,7 +97,7 @@ export const playStoreProjects: Project[] = [
       {
         type: "image",
         src: getProjectAssetPath("alien-survivor", "featureGraphics", "feature-graphic.svg"),
-        alt: "Alien Survivor showcase placeholder"
+        alt: "Hero Survivor combat showcase artwork"
       }
     ]
   },
@@ -146,7 +146,7 @@ export const playStoreProjects: Project[] = [
       {
         type: "image",
         src: getProjectAssetPath("bike-drift-master", "featureGraphics", "feature-graphic.svg"),
-        alt: "Bike Drift Master showcase placeholder"
+        alt: "Bike Drift Master highway showcase artwork"
       }
     ]
   },
@@ -195,7 +195,7 @@ export const playStoreProjects: Project[] = [
       {
         type: "image",
         src: getProjectAssetPath("asmr-punch", "featureGraphics", "feature-graphic.svg"),
-        alt: "ASMR Punch showcase placeholder"
+        alt: "Annoying Boss punch showcase artwork"
       }
     ]
   }

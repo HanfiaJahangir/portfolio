@@ -43,6 +43,27 @@ export default function DemoPage({ params }: DemoPageProps) {
       <PageHeader eyebrow="Playable Showcase" title={demo.title} description={demo.summary} />
       <PageSection spacing="compact">
         <PageContainer>
+          <div className="mb-5 overflow-hidden rounded-lg border border-white/10 bg-void/70 p-4 shadow-command backdrop-blur-xl">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-signal">
+                  Facility transfer complete
+                </p>
+                <p className="mt-2 text-sm leading-6 text-muted">
+                  Demo chamber loaded as an isolated interaction slice inside the gameplay
+                  engineering facility.
+                </p>
+              </div>
+              <div className="flex gap-2 text-xs font-bold uppercase tracking-[0.14em] text-muted">
+                <span className="rounded border border-white/10 bg-white/[0.04] px-3 py-2">
+                  Safe mount
+                </span>
+                <span className="rounded border border-white/10 bg-white/[0.04] px-3 py-2">
+                  Dual controls
+                </span>
+              </div>
+            </div>
+          </div>
           <DemoMount demo={demo} />
         </PageContainer>
       </PageSection>

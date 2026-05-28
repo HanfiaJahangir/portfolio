@@ -86,7 +86,7 @@ export const projectWorldZones: ProjectWorldZone[] = [
       "Upgrade power",
       "Escalate"
     ],
-    rewardLoop: ["Dropped pickups", "Power multipliers", "Wave clears", "Boss reward prep"],
+    rewardLoop: ["Dropped pickups", "Power multipliers", "Wave clears", "Boss reward charge"],
     atmosphere: ["Alien infestation", "Spawn portals", "Combat holograms", "Dark arena grid"],
     transition: "Holographic teleport into an arena as portals warm up around the player.",
     soundHooks: ["Portal hum", "Projectile pulse", "Pickup sparkle", "Wave alarm"],
@@ -158,7 +158,7 @@ export const projectWorldZones: ProjectWorldZone[] = [
       "A hub for Photon, Photon Quantum, and Colyseus architecture: client state, event flow, prediction boundaries, and session resolution.",
     route: "/systems",
     systems: ["Photon", "Photon Quantum", "Colyseus", "State Sync"],
-    interactions: ["Packet/event simulation prep", "Client/server topology", "Sync visualization"],
+    interactions: ["Packet/event rhythm", "Client/server topology", "Sync visualization"],
     metrics: [
       { label: "Stack", value: "Photon", detail: "realtime systems" },
       { label: "Stack", value: "Quantum", detail: "deterministic" },
@@ -224,9 +224,9 @@ export const projectWorldZones: ProjectWorldZone[] = [
     soundHooks: ["Room tone", "Distant creak", "Memory swell", "Light buzz"],
     mood: ["cinematic", "subtle", "atmospheric"],
     summary:
-      "A future horror systems zone for lighting, environmental storytelling, sound layering prep, and UI architecture without jumpscare gimmicks.",
+      "A controlled atmosphere zone for lighting, environmental storytelling, sound-layering direction, and UI architecture without jumpscare gimmicks.",
     route: "/projects",
-    systems: ["Lighting", "Reveal Triggers", "Sound Layering Prep", "Environmental UI"],
+    systems: ["Lighting", "Reveal Triggers", "Sound Layering", "Environmental UI"],
     interactions: ["Subtle reveal transitions", "Atmosphere panels", "Interaction pacing"],
     metrics: [
       { label: "Mode", value: "Cinematic", detail: "no jumpscares" },

@@ -78,6 +78,33 @@ const AnnoyingBossDemo = dynamic(
   }
 );
 
+const PollenPopDemo = dynamic(
+  () => import("@/components/demos/pollen-pop/PollenPopDemo").then((mod) => mod.PollenPopDemo),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="grid min-h-72 place-items-center rounded-lg border border-white/10 bg-panel/70 text-sm text-muted">
+        Loading Pollen Pop board
+      </div>
+    )
+  }
+);
+
+const BatHeroTransformDemo = dynamic(
+  () =>
+    import("@/components/demos/bat-hero/BatHeroTransformDemo").then(
+      (mod) => mod.BatHeroTransformDemo
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="grid min-h-72 place-items-center rounded-lg border border-white/10 bg-panel/70 text-sm text-muted">
+        Loading transformation mission
+      </div>
+    )
+  }
+);
+
 type DemoMountProps = {
   demo: DemoModule;
 };
@@ -97,6 +124,14 @@ export function DemoMount({ demo }: DemoMountProps) {
 
   if (demo.slug === "annoying-boss-punch-slice") {
     return <AnnoyingBossDemo />;
+  }
+
+  if (demo.slug === "pollen-pop-match3-slice") {
+    return <PollenPopDemo />;
+  }
+
+  if (demo.slug === "bat-hero-transform-mission") {
+    return <BatHeroTransformDemo />;
   }
 
   if (demo.renderer === "unity-webgl") {

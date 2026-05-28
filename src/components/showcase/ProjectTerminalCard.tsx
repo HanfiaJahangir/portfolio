@@ -67,7 +67,7 @@ export function ProjectTerminalCard({ project }: ProjectTerminalCardProps) {
         <div className="flex flex-wrap gap-2">
           <Button href={`/projects/${project.slug}`}>Open terminal</Button>
           <Button href={demo?.route ?? `/projects/${project.slug}#demo`} variant="ghost">
-            {demo?.route ? "Play demo" : "Demo slot"}
+            {demo?.route ? "Enter lab" : "View systems"}
           </Button>
           {project.playStoreUrl ? (
             <Button

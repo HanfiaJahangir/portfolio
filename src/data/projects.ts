@@ -33,32 +33,32 @@ export const projects: Project[] = [
   },
   {
     slug: "bat-super-hero",
-    title: "Bat Super Hero",
+    title: "Flying Bat Robot Bike Game",
     status: "shipped",
     summary:
-      "A superhero mission game with rescue objectives, combat encounters, transformations, and mobile ad integration.",
+      "A superhero robot transformation game with bike traversal, flying access, robot combat, rescue objectives, city missions, and mobile ad integration.",
     role: "Unity Gameplay Developer",
     image: "/images/flying_bat.jpg",
     media: [{ type: "image", src: "/images/flying_bat.jpg", alt: "Bat Super Hero gameplay" }],
     playStoreUrl:
       "https://play.google.com/store/apps/details?id=com.rds.bat.bike.robot.transformation.superhero.games&pcampaignid=web_share",
-    technologies: ["Unity3D", "C#", "Google Ads SDK"],
-    systems: ["Mission Flow", "Transformation", "Combat", "Ads"],
+    technologies: ["Unity3D", "C#", "Google Ads SDK", "Mobile Controls"],
+    systems: ["Mission Flow", "Robot Transformation", "Bike Traversal", "Combat", "Ads"],
     engineeringHighlights: [
       "Implemented mission-state logic for rescue and combat scenarios.",
-      "Built transformation gameplay that changes traversal and challenge handling.",
+      "Built transformation gameplay that changes bike traversal, flying access, and robot challenge handling.",
       "Integrated mobile monetization without blocking the primary gameplay loop."
     ],
     challenge:
-      "Deliver readable mobile missions while supporting transformation mechanics and monetization touchpoints.",
+      "Deliver readable mobile city missions while supporting transformation mechanics, traversal modes, combat, and monetization touchpoints.",
     solution:
-      "Separated mission state, player ability changes, and ad flows so gameplay remains responsive.",
+      "Separated mission state, player form changes, combat/rescue events, and ad flows so gameplay remains responsive.",
     impact:
-      "Shipped a mobile action title with mission pacing, transformation gameplay, and integrated ad systems.",
+      "Shipped a mobile action title with city rescue pacing, robot/bike transformation gameplay, and integrated ad systems.",
     metrics: [
-      { label: "Platform", value: "Android" },
-      { label: "Loop", value: "Mission Based" },
-      { label: "SDK", value: "Google Ads" }
+      { label: "Downloads", value: "10M+", detail: "Public Play Store download band" },
+      { label: "Loop", value: "Mission Based", detail: "Rescue, combat, traversal" },
+      { label: "Forms", value: "3", detail: "Bike, robot, flight" }
     ]
   },
   {

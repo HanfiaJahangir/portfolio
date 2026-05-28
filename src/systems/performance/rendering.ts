@@ -4,7 +4,11 @@ export const webglPerformance = {
   glOptions: {
     antialias: true,
     powerPreference: "high-performance" as const,
-    alpha: true
+    alpha: true,
+    stencil: false,
+    depth: true,
+    failIfMajorPerformanceCaveat: false,
+    preserveDrawingBuffer: false
   },
   frameloop: "demand" as const,
   maxInteractiveDpr: 1.5

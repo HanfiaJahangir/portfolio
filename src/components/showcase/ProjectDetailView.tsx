@@ -41,7 +41,7 @@ export function ProjectDetailView({ project }: ProjectDetailViewProps) {
                 </Button>
                 {demo?.route ? (
                   <Button href={demo.route} variant="ghost">
-                    Playable demo shell
+                    Enter playable lab
                   </Button>
                 ) : null}
               </div>
@@ -111,11 +111,13 @@ export function ProjectDetailView({ project }: ProjectDetailViewProps) {
               </ul>
             </article>
             <article id="demo" className="rounded-lg border border-white/10 bg-white/[0.04] p-5">
-              <h2 className="text-xl font-bold text-ink">Future Demo Slot</h2>
+              <h2 className="text-xl font-bold text-ink">
+                {demo ? "Playable Lab" : "Interactive Systems Brief"}
+              </h2>
               <p className="mt-4 text-sm leading-6 text-muted">
                 {demo
-                  ? `${demo.title} is available as a lazy-loaded playable mechanic slice.`
-                  : "This detail page is ready for a lazy-loaded playable mechanic slice, technical diagram, or optimization visualizer."}
+                  ? `${demo.title} is available as a compact, lazy-loaded mechanic lab connected to this case study.`
+                  : "This project is presented through its case study, systems breakdown, media, and production engineering notes."}
               </p>
               {demo?.route ? (
                 <div className="mt-5">

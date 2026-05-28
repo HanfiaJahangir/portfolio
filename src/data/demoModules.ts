@@ -2,6 +2,28 @@ import type { DemoModule } from "@/types/portfolio";
 
 export const demoModules: DemoModule[] = [
   {
+    slug: "pollen-pop-match3-slice",
+    title: "Pollen Pop Match-3 Slice",
+    status: "available",
+    summary:
+      "A compact candy match-3 board slice with swap validation, cascades, booster charge, score pressure, and reward-system framing.",
+    systems: ["Match-3 Resolver", "Cascade Flow", "Booster Economy"],
+    projectSlug: "pollen-pop",
+    renderer: "dom",
+    route: "/demos/pollen-pop-match3-slice"
+  },
+  {
+    slug: "bat-hero-transform-mission",
+    title: "Bat Hero Transformation Mission",
+    status: "available",
+    summary:
+      "A compact city-rescue slice with bike traversal, robot combat/rescue, flight access gates, objective state, and transformation feedback.",
+    systems: ["Transformation Modes", "Mission State", "Rescue Objectives"],
+    projectSlug: "bat-super-hero",
+    renderer: "dom",
+    route: "/demos/bat-hero-transform-mission"
+  },
+  {
     slug: "moto-max-track-race",
     title: "Moto Max Track Race",
     status: "available",
@@ -39,7 +61,7 @@ export const demoModules: DemoModule[] = [
     title: "Network State Timeline",
     status: "planned",
     summary:
-      "A future module for explaining server state, client feedback, and multiplayer session resolution.",
+      "A systems brief for explaining server state, client feedback, and multiplayer session resolution.",
     systems: ["Multiplayer", "State Sync", "PVP"],
     renderer: "dom",
     route: "/demos/network-state-timeline"
@@ -60,7 +82,7 @@ export const demoModules: DemoModule[] = [
     title: "Unity WebGL Demo Slot",
     status: "scaffolded",
     summary:
-      "Architecture-only shell for future Unity WebGL builds with async loading, fallback states, and memory-safe mounting.",
+      "A reserved Unity WebGL mount path with async loading, fallback states, and memory-safe teardown.",
     systems: ["Unity WebGL", "Async Loader", "Isolated Mount"],
     renderer: "unity-webgl",
     route: "/demos/unity-webgl-slot"

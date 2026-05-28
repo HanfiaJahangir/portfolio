@@ -14,6 +14,7 @@ import {
 import type { VehicleTelemetry } from "@/components/demos/bike-drift/types";
 import { useVehicleInput } from "@/components/demos/bike-drift/useVehicleInput";
 import { webglPerformance } from "@/systems/performance/rendering";
+import { prepareWebGLContext, releaseWebGLContext } from "@/systems/performance/webglLifecycle";
 
 const initialTelemetry: VehicleTelemetry = {
   speed: 0,
@@ -57,6 +58,11 @@ export function BikeDriftDemo() {
         camera={{ position: [0, 3.25, -6.4], fov: 54, near: 0.1, far: 180 }}
         dpr={webglPerformance.dpr}
         gl={webglPerformance.glOptions}
+        performance={{ min: 0.45 }}
+        onCreated={(state) => {
+          prepareWebGLContext(state);
+          return () => releaseWebGLContext(state.gl);
+        }}
         className="h-full w-full"
       >
         <Suspense fallback={null}>
